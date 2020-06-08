@@ -1,0 +1,28 @@
+//978. Longest Turbulent Subarray
+
+class Solution {
+public:
+    int compute (int a, int b) {
+        return a > b ? 1 : ((a == b) ? 0 : -1);
+    }
+    int maxTurbulenceSize(vector<int>& A) {
+        if (A.empty())
+            return 0;
+        int i = 0, j = 1;
+        int l = 1;
+        while (j < A.size()) {
+            int sign = compute(A[j - 1], A[j]);
+
+            // j到达 数组结尾 或者 波折符号块结尾
+            if (j == A.size() - 1 || sign * compute(A[j], A[j + 1]) != -1) {
+                // 统计块的长度
+                if (sign != 0)
+                    l = max(l, j - i + 1);
+                // 开始新的块
+                i = j;
+            }
+            j++;
+        }
+        return l;
+    }
+};

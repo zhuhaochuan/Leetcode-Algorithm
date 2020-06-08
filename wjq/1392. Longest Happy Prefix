@@ -1,0 +1,21 @@
+//1392. Longest Happy Prefix
+
+    string longestPrefix(string s) {
+        int base = 131;
+        unsigned long long p[100002];
+        p[0] = 1;
+        unsigned long long hash[100002];
+        hash[0] = 0;
+        for (int i = 1; i <= s.size(); i ++) {
+            hash[i] = hash[i-1] * base + s[i-1] - 'a' + 1;
+            p[i] = p[i-1] * base;
+        }
+        for (int i = s.size() - 1; i >= 1; i --) {
+            unsigned long long pre = hash[i];
+            unsigned long long suf = hash[s.size()] - hash[s.size()-i] * p[i];
+            if (pre == suf) {
+                return s.substr(0, i);
+            }
+        }
+        return "";
+    }

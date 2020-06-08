@@ -1,0 +1,43 @@
+//1234. Replace the Substring for Balanced String
+
+class Solution {
+public:
+    int balancedString(string s) {
+        unordered_map<char, int> m;
+        for (char c : s) {
+            m[c]++;
+        }
+        unordered_map<char, int>::iterator it;
+        for (it = m.begin(); it != m.end(); it++)
+            it->second = max(it->second - (int)s.length() / 4, 0);
+        return solve(s, m);
+    }
+    int solve(string origin, unordered_map<char, int> count) {
+        int counter = 0;
+        for (unordered_map<char, int>::iterator it = count.begin(); it != count.end(); it++)
+            if (it->second > 0)
+                counter += it->second;
+        if (counter == 0)
+            return 0;
+        int l = INT_MAX;
+        int i = 0, j = 0;
+        while (j < origin.length()) {
+            char c = origin[j];
+            // 如果map里需要这个元素
+            if (count[c] > 0)
+                counter--;
+            count[c] = count[c] - 1;
+            j++;
+            while (counter == 0) {
+                char d = origin[i];
+                l = min(l, j - i);
+                if (count[d] == 0) {
+                    counter++;
+                }
+                count[d] = count[d] + 1;
+                i++;
+            }
+        }
+        return l;
+    }
+};
