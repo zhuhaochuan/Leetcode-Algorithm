@@ -1,0 +1,14 @@
+//1346. Check If N and Its Double Exist
+
+class Solution {
+public:
+    bool checkIfExist(vector<int>& arr) {
+        unordered_set<int> s;
+        for (int a : arr) {
+            if (s.count(a * 2) != 0 || (a % 2 == 0 && s.count(a / 2) != 0))
+                return true;
+            s.insert(a);
+        }
+        return false;
+    }
+};
