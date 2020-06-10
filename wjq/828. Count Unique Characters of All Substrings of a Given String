@@ -1,0 +1,33 @@
+//828. Count Unique Characters of All Substrings of a Given String
+
+class Solution {
+public:
+    int uniqueLetterString(string s) {
+        int pre[s.length()];
+        int next[s.length()];
+        for (int i = 0; i < s.length(); i++)
+            pre[i] = -1;
+        for (int i = 0; i < s.length(); i++)
+            next[i] = s.length();
+        map<char, int> m;
+        for (int i = 0; i < s.length(); i++) {
+            if (m.find(s[i]) != m.end()) {
+                pre[i] = m[s[i]];
+            }
+            m[s[i]] = i;
+        }
+        map<char, int> mm;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (mm.find(s[i]) != mm.end()) {
+                next[i] = mm[s[i]];
+            }
+            mm[s[i]] = i;
+        }
+        int res = 0;
+        for (int i = 0; i < s.length(); i++) {
+            res = (res + (next[i] - i) * (i - pre[i])) % (1000000007);
+        }
+        return res;
+    }
+
+};

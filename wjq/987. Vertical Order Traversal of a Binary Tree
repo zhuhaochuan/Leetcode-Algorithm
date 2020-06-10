@@ -1,0 +1,50 @@
+//987. Vertical Order Traversal of a Binary Tree
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    struct Point{
+        int x;
+        int y;
+        int v;
+    };
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<Point> p;
+        travel(root, 0, 0, p);
+        sort(p.begin(), p.end(), [](Point a, Point b){
+            if (a.x == b.x) {
+                if (a.y == b.y)
+                    return a.v < b.v;
+                return a.y > b.y;
+            } else {
+                return a.x < b.x;
+            }
+        });
+        vector<vector<int>> res;
+        for (int i = 0; i < p.size(); i++) {
+            vector<int> temp;
+            temp.push_back(p[i].v);
+            while(i + 1 < p.size() && p[i].x == p[i + 1].x) {
+                i++;
+                temp.push_back(p[i].v);
+            }
+            res.push_back(temp);
+        }
+        return res;
+    }
+    void travel(TreeNode* root, int x, int y, vector<Point>& p) {
+        if (root == nullptr)
+            return;
+        p.push_back({x, y, root->val});
+        travel(root->left, x - 1, y - 1, p);
+        travel(root->right, x + 1, y - 1, p);
+    }
+};
