@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int uniquePathsIII(vector<vector<int>>& grid) {
+        int pathCount = 0;
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] != -1)
+                    pathCount++;
+                if (grid[i][j] == 1) {
+                    x = i;
+                    y = j;
+                } else if (grid[i][j] == 2) {
+                    o = i;
+                    k = j;
+                }
+            }
+        }
+
+        dfs(grid, x, y, pathCount);
+        return res;
+    }
+    set<int> vis;
+    int x, y;   //起始方格
+    int o, k;   //结束方格
+    int res = 0;
+    void dfs(vector<vector<int>>& grid, int i, int j, int pathCount) {
+        // 超出边界
+        if (i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size())
+            return;
+        // 障碍节点
+        if (grid[i][j] == -1)
+            return;
+        pathCount--;
+        if (0 == pathCount && i == o && j == k) {
+            res++;
+            return;
+        }
+        grid[i][j] = -1;
+        dfs(grid, i + 1, j, pathCount);
+        dfs(grid, i - 1, j, pathCount);
+        dfs(grid, i, j - 1, pathCount);
+        dfs(grid, i, j + 1, pathCount);
+        grid[i][j] = 0;
+    }
+};
