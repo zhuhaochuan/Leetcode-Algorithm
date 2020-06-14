@@ -1,0 +1,49 @@
+//1191. K-Concatenation Maximum Sum
+
+#define MAX(a,b) (a) > (b) ? (a) : (b)
+
+class Solution {
+public:
+    int maxSub(vector<int>& arr) {
+        long long curSum = 0;
+        long long  maxSum = 0;
+        for (int a : arr) {
+            curSum = MAX(curSum + a, 0);
+            maxSum = MAX(curSum, maxSum);
+        }
+        return maxSum % 1000000007;
+    }
+    int kConcatenationMaxSum(vector<int>& arr, int k) {
+        // k=1时，最大连续子串和
+        long long maxSum = maxSub(arr);
+        // 以i=0为起点的最大连续前缀和
+        long long maxPre = 0;
+        long long sum = 0;
+        for (int a : arr) {
+            sum += a % 1000000007;
+            maxPre = max(sum, maxPre);
+        }
+        // 以i=arr.size() - 1为终点的最大连续后缀和
+        long long maxPost = 0;
+        sum = 0;
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            sum = (sum + arr[i]) % 1000000007;
+            maxPost = max(sum, maxPost);
+        }
+
+        // 数组和
+        sum = 0;
+        for (int a : arr)
+            sum = (sum + a) % 1000000007;
+
+        long long res = INT_MIN;
+
+        if (sum > 0) {
+            res = max(maxSum, maxPost + ((k - 2) * sum) % 1000000007 + maxPre);
+        } else {
+            res = max(maxSum, (maxPost + maxPre));
+        }
+
+        return res % 1000000007;
+    }
+};
