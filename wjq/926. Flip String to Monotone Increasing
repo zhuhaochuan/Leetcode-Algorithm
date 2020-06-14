@@ -1,0 +1,21 @@
+//926. Flip String to Monotone Increasing
+
+class Solution {
+public:
+    int minFlipsMonoIncr(string S) {
+        if (S.length() == 0)
+            return 0;
+        int countOne = (S[0] == '1') ? 1 : 0;
+        int dp[S.length()];
+        dp[0] = 0;
+        for (int i = 1; i < S.length(); i++) {
+            if (S[i] == '0')
+                dp[i] = min(countOne, dp[i - 1] + 1);
+            else {
+                dp[i] = min(countOne + 1, dp[i - 1]);
+                countOne++;
+            }
+        }
+        return dp[S.length() - 1];
+    }
+};

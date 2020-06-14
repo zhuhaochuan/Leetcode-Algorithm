@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int minReorder(int n, vector<vector<int>>& connections) {
+        vector<vector<int>> g(n, vector<int>());
+        unordered_map<int, unordered_set<int>> m;
+        for (vector<int> v : connections) {
+            g[v[0]].push_back(v[1]);
+            g[v[1]].push_back(v[0]);
+            m[v[0]].insert(v[1]);
+        }
+        queue<int> q;
+        q.push(0);
+        unordered_set<int> vis;
+        vis.insert(0);
+        int res = 0;
+        while(!q.empty()) {
+            int x = q.front();
+            q.pop();
+            for (int node : g[x]) {
+                if (vis.find(node) != vis.end())
+                    continue;
+                if (m[node].find(x) == m[node].end())
+                    res++;
+                q.push(node);
+                vis.insert(node);
+            }
+        }
+        return res;
+    }
+};
