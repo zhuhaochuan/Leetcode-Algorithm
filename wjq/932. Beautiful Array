@@ -1,0 +1,17 @@
+//932. Beautiful Array
+
+class Solution {
+public:
+    vector<int> beautifulArray(int N) {
+        if (N == 1)
+            return {1};
+        vector<int> odd, even, res;
+        odd = beautifulArray((N + 1) / 2);
+        for (int i = 0; i < odd.size(); i++)
+            res.push_back(odd[i] * 2 - 1);
+        even = beautifulArray(N / 2);
+        for (int i = 0; i < even.size(); i++)
+            res.push_back(even[i] * 2);
+        return res;
+    }
+};
