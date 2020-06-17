@@ -1,0 +1,32 @@
+//865. Smallest Subtree with all the Deepest Nodes
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int max_depth;
+    TreeNode* ans;
+    TreeNode* subtreeWithAllDeepest(TreeNode* root) {
+        max_depth = 0;
+        ans = nullptr;
+        dfs(root, 0);
+        return ans;
+    }
+    int dfs(TreeNode* root, int depth) {
+        if (root == nullptr)
+            return depth - 1;
+        int left_depth = dfs(root->left, depth + 1);
+        int right_depth = dfs(root->right, depth + 1);
+        max_depth = max(max_depth, max(left_depth, right_depth));
+        if (left_depth == max_depth && right_depth == max_depth)
+            ans = root;
+        return max(left_depth, right_depth);
+    }
+};

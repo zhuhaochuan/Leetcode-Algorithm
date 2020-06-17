@@ -1,0 +1,44 @@
+// 738. Monotone Increasing Digits
+
+class Solution {
+public:
+    int monotoneIncreasingDigits(int N) {
+        if (N <= 9)
+            return N;
+        vector<int> num;
+        intToVector(num, N);
+        bool isIncrease = true;
+        for (int i = 1; i < num.size(); i++) {
+            if (num[i - 1] <= num[i])
+                isIncrease = false;
+        }
+        if (isIncrease)
+            return N;
+        int record_i = 0;
+        for (int i = 1; i < num.size(); i++) {
+            if (num[i - 1] < num[i]) {
+                num[i]--;
+                record_i = i;
+            }
+        }
+        for (int i = 0; i < record_i; i++)
+            num[i] = 9;
+        return vectorToInt(num);
+    }
+    void intToVector (vector<int>& num, int N) {
+        while (N != 0) {
+            int x = N % 10;
+            num.push_back(x);
+            N /= 10;
+        }
+    }
+    int vectorToInt(vector<int>& num) {
+        int sum = 0;
+        int b = 1;
+        for (int x : num) {
+            sum += x * b;
+            b *= 10;
+        }
+        return sum;
+    }
+};
