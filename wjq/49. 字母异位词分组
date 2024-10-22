@@ -1,0 +1,36 @@
+// 10分钟，错一次，31行未将m[i]转化为string
+// 直接使用了 char + int + string这种语法，C++不支持，导致编译报错
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> result;
+        std::unordered_map<string, int> m;
+        int idx = 0;
+        for (auto str : strs) {
+            string count_str = getStrCount(str);
+            if (m.find(count_str) == m.end()) {
+                m[count_str] = idx;
+                vector<string> temp;
+                temp.push_back(str);
+                result.push_back(temp);
+                idx++;
+            } else {
+                int index = m[count_str];
+                result[index].push_back(str);
+            }
+        }
+        return result;
+    }
+    std::string getStrCount(const string& str) {
+        std::unordered_map<int, int> m;
+        for (char c : str) {
+            m[c - 'a']++;
+        }
+        string res = "";
+        for (int i = 0; i < 26; i++) {
+            char cur = 'a' + i;
+            res += cur + std::to_string(m[i]) + "_";
+        }
+        return res;
+    }
+};
