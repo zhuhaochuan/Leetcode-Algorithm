@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        std::deque<int> decre_queue;
+        vector<int> res;
+        for (int i = 0; i < nums.size(); i++) {
+            // 左边出一个元素
+            if (i - k >= 0) {
+                int remove_num = nums[i - k];
+                if (decre_queue.front() == remove_num) {
+                    decre_queue.pop_front();
+                }
+            }
+
+            // 右边进一个元素，弹出所有比进的元素小的值
+            int add_num = nums[i];
+            while(!decre_queue.empty() && decre_queue.back() < add_num) {
+                decre_queue.pop_back();
+            }
+            decre_queue.push_back(add_num);
+            if (i >= k - 1) {
+                res.push_back(decre_queue.front());
+            }
+        }
+        return res;
+    }
+};
