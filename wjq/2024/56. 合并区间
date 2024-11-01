@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        std::sort(intervals.begin(), intervals.end(), [](vector<int> a, vector<int> b) {
+            return a[0] < b[0];
+        });
+        vector<vector<int>> res;
+        for (auto& vec : intervals) {
+            if(!res.empty() && !(res.back()[1] < vec[0] || vec[1] < res.back()[0])) {
+                res.back()[1] = std::max(res.back()[1], vec[1]);
+            } else {
+                res.push_back(vec);
+            }
+        }
+        return res;
+    }
+};
