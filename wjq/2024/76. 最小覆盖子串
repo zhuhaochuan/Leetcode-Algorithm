@@ -1,0 +1,56 @@
+示例 1：
+
+输入：s = "ADOBECODEBANC", t = "ABC"
+输出："BANC"
+解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。
+示例 2：
+
+输入：s = "a", t = "a"
+输出："a"
+解释：整个字符串 s 是最小覆盖子串。
+示例 3:
+
+输入: s = "a", t = "aa"
+输出: ""
+解释: t 中两个字符 'a' 均应包含在 s 的子串中，
+因此没有符合条件的子字符串，返回空字符串。
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        std::unordered_map<char, int> count_s;
+        std::unordered_map<char, int> count_t;
+        int valid = 0, cur_valid = 0;
+        for (char c : t) {
+            count_t[c]++;
+            valid++;
+        }
+        int left = 0, right = 0;
+        int min_len = INT_MAX, record_left = -1, record_right = 0;
+        // ADOBECODEBANC， ABC
+        while (left < s.length() && right < s.length()) {
+            char c = s[right];
+            if (count_s[c] < count_t[c]) {
+                cur_valid++;
+            }
+            count_s[c]++;
+            while (cur_valid == valid) {
+                if (right - left + 1 < min_len) {
+                    min_len = right - left + 1;
+                    record_left = left;
+                    record_right = right;
+                }
+                if (left >= right) {
+                    break;
+                }
+                char d = s[left];
+                if (count_s[d] <= count_t[d] && count_t[d] != 0) {
+                    cur_valid--;
+                }
+                count_s[d]--;
+                left++;
+            }
+            right++;
+        }
+        return record_left == -1? "" : s.substr(record_left, min_len);
+    }
+};
