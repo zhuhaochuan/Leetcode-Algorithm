@@ -1,0 +1,55 @@
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size(), n = nums2.size();
+        int step = (m + n) / 2 + 1;
+        int i = 0, last_i = 0;
+        int idx1 = 0, idx2 = 0;
+        while (step > 0) {
+            last_i = i;
+            if (idx1 < m && (idx2 >= n || nums1[idx1] < nums2[idx2])) {
+                i = nums1[idx1];
+                idx1++;            
+            } else  {
+                i = nums2[idx2];
+                idx2++;
+            }
+            step--;
+        }
+        if ((m + n) % 2 == 0) {
+            return (i + last_i) / 2.0;
+        } else {
+            return i;
+        }
+    }
+};
+
+
+// 方法2：划分 O(log(min(n, m)))
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        if (nums1.size() > nums2.size()) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+        int n = nums1.size(), m = nums2.size();
+        int left = 0, right = n;
+        int keep1, keep2;
+        while (left <= right) {
+            int i = (left + right) / 2;
+            int j = (1 + m + n) / 2 - i;
+            int numi_1 = (i == 0) ? INT_MIN : nums1[i - 1];
+            int numi = (i == n) ? INT_MAX : nums1[i];
+            int numj_1 = (j == 0) ? INT_MIN : nums2[j - 1];
+            int numj = (j == m) ? INT_MAX : nums2[j];
+            if (numi_1 < numj) {
+                keep1 = std::max(numi_1, numj_1);
+                keep2 = std::min(numi, numj);
+                left = i + 1;
+            } else {
+                right = i - 1;
+            }
+        }
+        return (m + n) % 2 == 0 ? (keep1 + keep2) / 2.0 : keep1;
+    }
+};

@@ -1,0 +1,62 @@
+class Trie {
+public:
+    struct TreeNode {
+        char cur;
+        bool word_end;
+        TreeNode* next[26];
+        TreeNode(char c): cur(c) {
+            for (int i = 0; i < 26; i++) {
+                next[i] = nullptr;
+            }
+            word_end = false;
+        }
+    };
+    TreeNode* root_;
+    Trie() {
+        root_ = new TreeNode('0');
+    }
+    
+    void insert(string word) {
+        TreeNode* cur = root_;
+        for (int i = 0; i < word.size(); i++) {
+            int idx = word[i] - 'a';
+            if (cur->next[idx] == nullptr) {
+                cur->next[idx] = new TreeNode(word[i]);
+            }
+            cur = cur->next[idx];
+        }
+        cur->word_end = true;
+    }
+    
+    bool search(string word) {
+        TreeNode* cur = root_;
+        for (int i = 0; i < word.size(); i++) {
+            int idx = word[i] - 'a';
+            cur = cur->next[idx];
+            if (cur == nullptr) {
+                return false;
+            }
+        }
+        return cur->word_end;
+    }
+    
+    bool startsWith(string prefix) {
+        TreeNode* cur = root_;
+        for (int i = 0; i < prefix.size(); i++) {
+            int idx = prefix[i] - 'a';
+            cur = cur->next[idx];
+            if (cur == nullptr) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */

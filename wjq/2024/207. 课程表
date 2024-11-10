@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> inDegree(numCourses, 0);
+        vector<vector<int>> m(numCourses);
+
+        for (auto& vec : prerequisites) {
+            inDegree[vec[0]]++;
+            m[vec[1]].push_back(vec[0]);
+        }
+        std::deque<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                q.push_back(i);
+            }
+        }
+        int pop_sz = 0;
+        while (!q.empty()) {
+            int cur = q.front();
+            q.pop_front();
+            pop_sz++;
+            for (int i = 0; i < m[cur].size(); i++) {
+                int next = m[cur][i];
+                inDegree[next]--;
+                if (inDegree[next] == 0) {
+                    q.push_back(next);
+                }
+            }
+        }
+        return pop_sz == numCourses;
+    }
+};
